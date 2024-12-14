@@ -1,95 +1,128 @@
-# LLM-Powered Chatbot with Django and FastAPI
+# Step-by-Step Guide for Setting Up DocCreatorMakeFont Project
 
-This project integrates a FastAPI-based backend with a Django frontend to create a chatbot application. The backend uses Hugging Face Transformers and vector search to provide intelligent responses to user queries, while the Django frontend provides a simple UI for interaction.
+This guide walks you through the process of setting up the **DocCreatorMakeFont** project with a custom Urdu font on an Ubuntu-based system using WSL (Windows Subsystem for Linux). It includes instructions to create the required files, configure dependencies, add a custom Urdu font, and build the project to generate the Urdu `.of` file.
 
-## Features
+## Step 1: Setting Up Ubuntu Using WSL
+1. **Enable WSL on Windows**:
+   - Open PowerShell as an administrator and run:
+     ```powershell
+     wsl --install
+     ```
+   - This installs Ubuntu as the default distribution.
 
-- **FastAPI Backend**: Handles query processing and response generation.
-- **Hugging Face Transformers**: Leverages pre-trained language models for generating responses.
-- **DocArray Integration**: Performs vector search for document retrieval.
-- **Django Frontend**: A simple web UI for user interaction.
-- **CORS Support**: Enables cross-origin requests for seamless frontend-backend communication.
+2. **Set Up Ubuntu**:
+   - After installation, launch Ubuntu from the Start menu.
+   - Complete the initial setup by creating a user and password.
 
-## Prerequisites
+## Step 2: Create and Configure the `DocCreatorMakeFont.pro` File
+1. **Navigate to the DocCreatorMakeFont Directory**:
+   - In Ubuntu, create the project folder and navigate to it:
+     ```bash
+     mkdir ~/DocCreatorMakeFont
+     cd ~/DocCreatorMakeFont
+     ```
 
-- Python 3.8 or higher
-- Git (for version control)
+2. **Create the `DocCreatorMakeFont.pro` File**:
+   - Inside the `DocCreatorMakeFont` folder, create a file named `DocCreatorMakeFont.pro` with the following content:
+     ```pro
+     # Define the project
+     QT += core gui xml
+     CONFIG += c++11
+     TARGET = DocCreatorMakeFont
+     TEMPLATE = app
+     INCLUDEPATH += .
+     SOURCES += main.cpp
+     HEADERS += MainWindow.hpp
+     LIBS += -lQt5Widgets
+     MOC_DIR = ./.moc
+     ```
 
-## Installation
+3. **Configure the Project Using qmake**:
+   - Run the following command to configure the project:
+     ```bash
+     qmake ./DocCreatorMakeFont.pro
+     ```
 
-1. **Clone the repository**:
+## Step 3: Build the Project Using `rebuild.sh` Script
+1. **Create the `rebuild.sh` Script**:
+   - Inside the `DocCreatorMakeFont` directory, create the `rebuild.sh` script to automate the build process:
+     ```bash
+     #!/bin/bash
+     qmake ./DocCreatorMakeFont.pro
+     make clean
+     make
+     ./DocCreatorMakeFont -platform xcb
+     ```
 
-    ```bash
-    git clone https://github.com/UmerMehmood1/KnowledgeBaseChatBot.git
-    cd KnowledgeBaseChatBot
-    ```
+2. **Make the Script Executable**:
+   - Run the following command to make the `rebuild.sh` script executable:
+     ```bash
+     chmod +x rebuild.sh
+     ```
 
-2. **Create a virtual environment**:
+3. **Run the Build Process**:
+   - Execute the script to rebuild and run the application:
+     ```bash
+     ./rebuild.sh
+     ```
 
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-    ```
+## Step 4: Add Custom Urdu Font to the Project
+1. **Create a New Directory for Fonts**:
+   - Inside the `DocCreatorMakeFont` project folder, create a `fonts` directory:
+     ```bash
+     mkdir fonts
+     ```
 
-3. **Install the required dependencies**:
+2. **Add the Urdu Font File**:
+   - Place your **Urdu font** file (e.g., `urdu_font.ttf`) in the `fonts` directory.
 
-    ```bash
-    pip install -r requirements.txt
-    ```
+3. **Modify the Code to Load the Font**:
+   - Open the appropriate file (e.g., `MainWindow.cpp`) and add the following code to load the custom Urdu font:
+     ```cpp
+     QString currentDir = QDir::currentPath();
+     QString fontPath = currentDir + "/fonts/urdu_font.ttf";
+     int fontId = QFontDatabase::addApplicationFont(fontPath);
+     QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontId);
+     if (!fontFamilies.isEmpty()) {
+         QString urduFontFamily = fontFamilies.at(0);
+         QFont urduFont(urduFontFamily);
+         fontLabel->setFont(urduFont);
+         sizeLabel->setFont(urduFont);
+         m_processPB->setFont(urduFont);
+     }
+     ```
 
-4. **Migrate the Django database**:
+## Step 5: Generate the Urdu `.of` File
+   - After modifying the code, run the `rebuild.sh` script to rebuild the project and generate the Urdu `.of` file.
 
-    ```bash
-    python manage.py migrate
-    ```
+## Step 6: Place the Urdu `.of` File in the Correct Directory
+1. **Move the Urdu `.of` File**:
+   - Once the `.of` file is generated, move it to the `DocCreator/data/font/` directory:
+     ```bash
+     mv urdu.of ~/DocCreator/data/font/
+     ```
 
-5. **Run the Django development server**:
+## Step 7: Create Custom Keyboard for Urdu
+1. **Navigate to the Keyboards Directory**:
+   - Go to the `keyboards` directory inside the `DocCreator` project:
+     ```bash
+     cd ~/DocCreator/keyboards
+     ```
 
-    ```bash
-    python manage.py runserver
-    ```
+2. **Create a Custom Keyboard for Urdu**:
+   - Implement the custom keyboard layout for Urdu input by modifying the keyboard files.
 
-6. **Run the FastAPI server**:
+## Step 8: Final Testing
+1. **Run the DocCreator Project**:
+   - After completing all the steps, run the project to test the functionality of the custom Urdu font and the Urdu keyboard:
+     ```bash
+     ~/installed/DocCreator/bin/DocCreator
+     ```
 
-    Open a new terminal window, activate the virtual environment, and run:
+2. **Verify the Font and Keyboard**:
+   - Ensure that the Urdu font is properly loaded and applied to the labels.
+   - Verify that the custom Urdu keyboard works as expected.
 
-    ```bash
-    uvicorn api.api:app --reload --host 127.0.0.2 --port 8080
-    ```
+## Conclusion
+You have successfully set up the **DocCreatorMakeFont** project, added a custom Urdu font, and created the corresponding `.of` file. Additionally, you have implemented a custom keyboard for Urdu input in your application.
 
-    The FastAPI server should now be running at `http://127.0.0.2:8080`.
-
-## Usage
-
-1. Open your web browser and go to `http://127.0.0.1:8000` to access the Django frontend.
-2. Type your query in the input box and click "Send."
-3. The chatbot will process your query using the FastAPI backend and return a response.
-
-## Demo
-
-[![Watch the video](https://img.youtube.com/vi/kHo18SSzFec/maxresdefault.jpg)](https://youtu.be/kHo18SSzFec)
-
-Click the image above to watch the video demonstration of the chatbot in action.
-
-## Customization
-
-- **Change Models**: To use a different language model, modify the `model_name` parameter in the `api.py` file.
-- **Frontend Styling**: Customize the UI by editing `llm_app/templates/query_form.html` and updating the CSS.
-
-## Troubleshooting
-
-- **CORS Issues**: If you encounter CORS errors, ensure that the `allow_origins` in `api.py` is correctly configured to match your frontend's URL.
-- **Model Loading Issues**: If models fail to load, ensure you have an active internet connection or the models are correctly downloaded.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
-
-## Contributing
-
-Contributions are welcome! Please submit pull requests or open issues for any enhancements or bug fixes.
-
-## Acknowledgments
-
-- Hugging Face for providing pre-trained language models.
-- Django and FastAPI communities for excellent web frameworks.
