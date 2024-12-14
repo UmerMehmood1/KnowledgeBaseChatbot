@@ -14,7 +14,24 @@ This guide walks you through the process of setting up the **DocCreatorMakeFont*
    - After installation, launch Ubuntu from the Start menu.
    - Complete the initial setup by creating a user and password.
 
-## Step 2: Create and Configure the `DocCreatorMakeFont.pro` File
+## Step 2: Install Required Dependencies on Ubuntu
+1. **Update Package List**:
+   - Before installing any dependencies, update the package list:
+     ```bash
+     sudo apt update
+     ```
+
+2. **Install Required Packages**:
+   - Install essential development tools, including `qmake`, `make`, and `g++`:
+     ```bash
+     sudo apt install build-essential qt5-qmake qtbase5-dev qtchooser qtbase5-dev-tools
+     ```
+   - Additionally, install dependencies for font management and Qt integration:
+     ```bash
+     sudo apt install libfontconfig1 libfreetype6
+     ```
+
+## Step 3: Create and Configure the `DocCreatorMakeFont.pro` File
 1. **Navigate to the DocCreatorMakeFont Directory**:
    - In Ubuntu, create the project folder and navigate to it:
      ```bash
@@ -43,7 +60,7 @@ This guide walks you through the process of setting up the **DocCreatorMakeFont*
      qmake ./DocCreatorMakeFont.pro
      ```
 
-## Step 3: Build the Project Using `rebuild.sh` Script
+## Step 4: Build the Project Using `rebuild.sh` Script
 1. **Create the `rebuild.sh` Script**:
    - Inside the `DocCreatorMakeFont` directory, create the `rebuild.sh` script to automate the build process:
      ```bash
@@ -66,7 +83,7 @@ This guide walks you through the process of setting up the **DocCreatorMakeFont*
      ./rebuild.sh
      ```
 
-## Step 4: Add Custom Urdu Font to the Project
+## Step 5: Add Custom Urdu Font to the Project
 1. **Create a New Directory for Fonts**:
    - Inside the `DocCreatorMakeFont` project folder, create a `fonts` directory:
      ```bash
@@ -92,37 +109,26 @@ This guide walks you through the process of setting up the **DocCreatorMakeFont*
      }
      ```
 
-## Step 5: Generate the Urdu `.of` File
+## Step 6: Generate the Urdu `.of` File
    - After modifying the code, run the `rebuild.sh` script to rebuild the project and generate the Urdu `.of` file.
 
-## Step 6: Place the Urdu `.of` File in the Correct Directory
+## Step 7: Place the Urdu `.of` File in the Correct Directory
 1. **Move the Urdu `.of` File**:
    - Once the `.of` file is generated, move it to the `DocCreator/data/font/` directory:
      ```bash
      mv urdu.of ~/DocCreator/data/font/
      ```
 
-## Step 7: Create Custom Keyboard for Urdu
+## Step 8: Create Custom Keyboard for Urdu
 1. **Navigate to the Keyboards Directory**:
    - Go to the `keyboards` directory inside the `DocCreator` project:
      ```bash
      cd ~/DocCreator/keyboards
      ```
 
-2. **Create a Custom Keyboard for Urdu**:
-   - Implement the custom keyboard layout for Urdu input by modifying the keyboard files.
+2. **Create the `urdu_keyboard.cpp` File**:
+   - Create a new file called `urdu_keyboard.cpp` and define the custom Urdu keyboard layout in it.
+   - Add the logic for handling input and keys in this file.
 
-## Step 8: Final Testing
-1. **Run the DocCreator Project**:
-   - After completing all the steps, run the project to test the functionality of the custom Urdu font and the Urdu keyboard:
-     ```bash
-     ~/installed/DocCreator/bin/DocCreator
-     ```
-
-2. **Verify the Font and Keyboard**:
-   - Ensure that the Urdu font is properly loaded and applied to the labels.
-   - Verify that the custom Urdu keyboard works as expected.
-
-## Conclusion
 You have successfully set up the **DocCreatorMakeFont** project, added a custom Urdu font, and created the corresponding `.of` file. Additionally, you have implemented a custom keyboard for Urdu input in your application.
 
